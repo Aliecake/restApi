@@ -1,15 +1,15 @@
 'use strict';
-const Sequelize = require('sequelize');
+const {Sequelize, Model} = require('sequelize');
 
-module.exports = (sequelize) => {
+module.exports = (sequelize, DataTypes) => {
   const Course = sequelize.define('Course', {
     id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
     title: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull:false,
       validate: {
         notNull: {
@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
       },
     },
     description: {
-      type: Sequelize.TEXT,
+      type: DataTypes.TEXT,
       allowNull:false,
       validate: {
         notNull: {
@@ -32,12 +32,15 @@ module.exports = (sequelize) => {
         },
       },
     },
-    estimatedTime: Sequelize.STRING, //nullable
-    materialsNeeded: Sequelize.STRING //nullable
+    estimatedTime: DataTypes.STRING, //nullable
+    materialsNeeded: DataTypes.STRING //nullable
   }, {});
   Course.associate = function(models) {
-    Course.belongsTo(models.User, {
-      foreignKey: 'userId'
+    Course.hasMany(models.User, {
+      foreignKey: {
+        fieldName: `userId`,
+        allowNull: true
+      }
     });
   };
   return Course;
