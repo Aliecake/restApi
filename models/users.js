@@ -58,14 +58,12 @@ module.exports = (sequelize) => {
             }
         }
     }, {
-        timestamps: true,
         sequelize
     })
     User.associate = (models) => {
-      User.belongsTo(models.Course, {
+      User.hasMany(models.Course, {
         foreignKey: {
           fieldName: `userId`,
-          allowNull: true
         }
       });
     };

@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     materialsNeeded: DataTypes.STRING //nullable
   }, {});
   Course.associate = function(models) {
-    Course.hasMany(models.User, {
+    Course.belongsTo(models.User, {
       foreignKey: {
         fieldName: `userId`,
         allowNull: true

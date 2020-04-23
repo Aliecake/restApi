@@ -22,6 +22,7 @@ app.use(morgan('dev'));
 (async () => {
   try {
     await sequelize.authenticate();
+    await sequelize.sync()
     console.log(`Connection to the database is working`)
   } catch {
     console.log(`Connection to the DB failed`)
