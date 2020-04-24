@@ -15,7 +15,7 @@ const router = express.Router();
 router.get('/users', middleware.authenticateUser, middleware.asyncHandler(async(req, res) => {
     const currentUser = req.currentUser;
     
-    const user = await User.findOne({
+    const user = await User.scope('withoutPassword', 'withoutTimestamps').findOne({
         where: {
             firstName: currentUser.firstName,
             emailAddress: currentUser.emailAddress
@@ -23,11 +23,7 @@ router.get('/users', middleware.authenticateUser, middleware.asyncHandler(async(
     });
 
     res.status(200).json({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        emailAddress: user.emailAddress,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt
+        user: user
     })
 }));
 /**
