@@ -37,6 +37,7 @@ module.exports = (sequelize) => {
             type: Sequelize.STRING,
             allowNull: false,
             validate: {
+                isEmail: true,
                 notEmpty: {
                     msg: `Provide Email Address`
                 },
@@ -58,10 +59,19 @@ module.exports = (sequelize) => {
             }
         }
     }, {
+        scopes: {
+            withoutPassword: {
+              attributes: { exclude: ['password'] },
+            },
+            withoutTimestamps: {
+                attributes: { exclude: ['createdAt', 'updatedAt'] },
+              },
+          },
         sequelize
     })
     User.associate = (models) => {
       User.hasMany(models.Course, {
+        as: 'addedBy',
         foreignKey: {
           fieldName: `userId`,
           allowNull: false

@@ -34,9 +34,16 @@ module.exports = (sequelize, DataTypes) => {
     },
     estimatedTime: DataTypes.STRING, //nullable
     materialsNeeded: DataTypes.STRING //nullable
-  }, {});
+  }, {
+    scopes: {
+      withoutTimestamps: {
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
+        },
+    },
+  });
   Course.associate = function(models) {
     Course.belongsTo(models.User, {
+      as: 'addedBy',
       foreignKey: {
         fieldName: `userId`,
         allowNull: false
