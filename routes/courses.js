@@ -59,20 +59,25 @@ router.post('/courses', validation.course, middleware.authenticateUser, middlewa
 }));
 
 /**PUT /api/courses/:id 204 - Updates a course and returns no content */
-router.put('/courses/:id', middleware.authenticateUser, middleware.asyncHandler(async(req, res) => {
+router.put('/courses/:id', validation.course, middleware.authenticateUser, middleware.asyncHandler(async(req, res) => {
     const currentUser = req.currentUser;
-    const course = await Course.findByPk(req.params.id)
+    const errors = validationResult(req);
 
-    //only addedBy associated user can change course
-    if (course.userId === currentUser.id){
-        await course.update(req.body)
-        res.status(204).end()
+    if (!errors.isEmpty()) {
+        res.status(400).json(errors.array())
     } else {
-        res.status(403).json({
-            message: `Error 403 forbidden`
-        })
-    }
+        const course = await Course.findByPk(req.params.id)
 
+        //only addedBy associated user can change course
+        if (course.userId === currentUser.id){
+            await course.update(req.body)
+            res.status(204).end()
+        } else {
+            res.status(403).json({
+                message: `Error 403 forbidden`
+            })
+        }
+    }
 }));
 
 /**DELETE /api/courses/:id 204 - Deletes a course and returns no content */

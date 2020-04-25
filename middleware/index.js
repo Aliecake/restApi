@@ -1,7 +1,7 @@
 const express = require('express');
 const auth = require('basic-auth');
 const bcryptjs = require('bcryptjs');
-const { User } = require('../models')
+const { User } = require('../models');
 
 
 const middleware = {}
@@ -17,13 +17,12 @@ const middleware = {}
       }
     }
   }
-
+  /** Handler function to check user authentication*/
   middleware.authenticateUser = async(req, res, next) => {
     let message = null;
     let user = null;
     //parsed from Auth header
     var credentials = auth(req)
-  
 
     if (credentials) {
          user = await User.findOne({
@@ -57,5 +56,6 @@ const middleware = {}
       next();
     }
   }
+
 
   module.exports = middleware;
