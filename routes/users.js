@@ -3,10 +3,11 @@
 const express = require('express');
 const middleware = require('../middleware')
 const { User } = require('../models')
-const auth = require('basic-auth');
 const bcryptjs = require('bcryptjs');
-//express validator
+const { validationResult } = require('express-validator');
+const validation = require('../middleware/validators')
 const router = express.Router();
+
 
 
 /**
@@ -14,10 +15,9 @@ const router = express.Router();
  */
 router.get('/users', middleware.authenticateUser, middleware.asyncHandler(async(req, res) => {
     const currentUser = req.currentUser;
-    
+    //scope from models, strips info
     const user = await User.scope('withoutPassword', 'withoutTimestamps').findOne({
         where: {
-            firstName: currentUser.firstName,
             emailAddress: currentUser.emailAddress
         }
     });
@@ -30,11 +30,17 @@ router.get('/users', middleware.authenticateUser, middleware.asyncHandler(async(
  * POST /api/users 201 - Creates a user, sets the Location header to "/", and returns no content
  */
 
-router.post('/users', middleware.asyncHandler(async(req, res) => {
+router.post('/users', validation.user, middleware.asyncHandler(async(req, res) => {
     const user = req.body;
-    user.password = bcryptjs.hashSync(user.password)
-    await User.create(user)
-    res.location('/').status(201).end()
+    let errors = validationResult(req)
+
+    if(!errors.isEmpty()){
+        res.status(400).json(errors.array())
+    } else {
+        user.password = bcryptjs.hashSync(user.password)
+        await User.create(user)
+        res.location('/').status(201).end()
+    }
 }));
 
 
