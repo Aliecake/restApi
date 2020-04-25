@@ -5,10 +5,10 @@ validation = {}
 validation.user = [
     check('firstName')
         .isLength({ min:1 }).withMessage('First Name is a required field.')
-        .isAlphanumeric().withMessage('Login must be alphanumeric.'),
+        .isAlphanumeric().withMessage('First name must be alphanumeric.'),
     check('lastName')
-        .isLength({ min:1 }).withMessage('First Name is a required field.')
-        .isAlphanumeric().withMessage('Login must be alphanumeric.'),
+        .isLength({ min:1 }).withMessage('Last Name is a required field.')
+        .isAlphanumeric().withMessage('Last must be alphanumeric.'),
     check('emailAddress')
         .isEmail().withMessage(`Email must be formatted email@email.com`),
     check('password')
