@@ -31,6 +31,17 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+//DB Connection test
+(async () => {
+  try {
+    await sequelize.authenticate();
+    await sequelize.sync()
+    console.log(`Connection to the database is working`)
+  } catch {
+    console.log(`Connection to the DB failed`)
+  }
+})()
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

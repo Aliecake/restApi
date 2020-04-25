@@ -19,16 +19,6 @@ app.use(express.json());
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
 
-(async () => {
-  try {
-    await sequelize.authenticate();
-    await sequelize.sync()
-    console.log(`Connection to the database is working`)
-  } catch {
-    console.log(`Connection to the DB failed`)
-  }
-})()
-
 //API routes
 app.use('/api', courseRoutes, userRoutes);
 
