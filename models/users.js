@@ -29,7 +29,7 @@ module.exports = (sequelize) => {
                     msg: `Provide Last Name`
                 },
                 notNull: {
-                    msg: `Provide First Name`
+                    msg: `Provide Last Name`
                 }
             }
         },
