@@ -25,7 +25,7 @@ app.use('/api', courseRoutes, userRoutes);
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
   res.json({
-    message: 'Welcome to Lauren REST API project!',
+    message: 'Welcome to my REST API Project. Grab a tea or coffee and have a look around',
   });
 });
 
@@ -48,7 +48,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// set our port
+
 app.set('port', process.env.PORT || 3000);
 
 // start listening on our port
