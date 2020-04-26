@@ -11,11 +11,11 @@ const router = express.Router();
 /**
  * GET /api/users 200 - Returns the courses with associated users
  */
-router.get('/courses', middleware.authenticateUser, middleware.asyncHandler(async(req, res) => {
+router.get('/courses', middleware.asyncHandler(async(req, res) => {
     //scope from models, strips info
     const courses = await Course.scope('withoutTimestamps').findAll({
         include:  [{
-            model: User.scope('withoutPassword'),
+            model: User.scope('withoutPassword', 'withoutTimestamps'),
             as: 'addedBy'
         }]
     })
@@ -27,10 +27,10 @@ router.get('/courses', middleware.authenticateUser, middleware.asyncHandler(asyn
 
 /**GET /api/courses/:id 200 - Returns a the course (including the user that owns the course) for the provided course ID */
 
-router.get('/courses/:id', middleware.authenticateUser, middleware.asyncHandler(async(req, res) => {
-    const course = await Course.findByPk(req.params.id, {
+router.get('/courses/:id', middleware.asyncHandler(async(req, res) => {
+    const course = await Course.scope('withoutTimestamps').findByPk(req.params.id, {
         include: [{
-            model: User.scope('withoutPassword'),
+            model: User.scope('withoutPassword', 'withoutTimestamps'),
             as: 'addedBy'
         }]
     })
@@ -86,7 +86,7 @@ router.delete('/courses/:id', middleware.authenticateUser, middleware.asyncHandl
     const course = await Course.findByPk(req.params.id)
 
     //only addedBy associated user can delete course
-    if (course.userId === req.currentUser.id) {
+    if (course.userId === currentUser.id) {
         await course.destroy()
         res.status(204).end()
     } else {
