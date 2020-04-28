@@ -54,7 +54,7 @@ router.post('/courses', validation.course, middleware.authenticateUser, middlewa
             materialsNeeded: req.body.materialsNeeded,
             userId: user.id
         })
-        res.location('/').status(201).end();
+        res.location(`/courses/${course.id}`).status(201).end();
     }
 }));
 
